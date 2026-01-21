@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     BOT_TOKEN: str
-    CHANELS: dict[str, int]
+    CHANNELS: dict[str, int]
     
     model_config = SettingsConfigDict(
         env_file=".env",

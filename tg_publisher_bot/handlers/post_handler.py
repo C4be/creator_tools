@@ -1,5 +1,5 @@
 from aiogram import Router, F, types
-from aiogram.fsm.context import ContextTypes
+from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from config.settings import config
 from services.publisher import publish_to_channel
@@ -7,7 +7,7 @@ from services.publisher import publish_to_channel
 router = Router()
 
 @router.message(F.text | F.photo)
-async def handle_new_post(message: types.Message, state: ContextTypes.FSMContext):
+async def handle_new_post(message: types.Message, state: FSMContext):
     # Сохраняем данные во временное хранилище (FSM)
     await state.update_data(
         content_text=message.text or message.caption,
@@ -22,7 +22,7 @@ async def handle_new_post(message: types.Message, state: ContextTypes.FSMContext
     await message.answer("Контент получен. Куда постим?", reply_markup=builder.as_markup())
 
 @router.callback_query(F.data.startswith("pub_"))
-async def process_publish(callback: types.CallbackQuery, state: ContextTypes.FSMContext):
+async def process_publish(callback: types.CallbackQuery, state: FSMContext):
     channel_id = int(callback.data.split("_")[1])
     data = await state.get_data()
     
